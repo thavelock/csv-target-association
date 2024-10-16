@@ -26,23 +26,29 @@ def generate_csv(
     snyk_token:
         Annotated[
             str,
-            typer.Argument(
+            typer.Option(
                 help='Snyk API token',
-                envvar='SNYK_TOKEN')],
+                envvar='SNYK_TOKEN',
+                default=...)],
     org_id:
         Annotated[
             str,
-            typer.Argument(
+            typer.Option(
                 help='Snyk API token',
-                envvar='SNYK_ORG_ID')],
+                envvar='SNYK_ORG_ID',
+                default=...)],
     output_file:
         Annotated[
             str,
             typer.Option(
-                help='Output filename')] = 'output.csv'
-    ):
+                help='Output filename')] = 'output.csv',
+    source_types:
+        Annotated[
+            str,
+            typer.Option(
+                help='Filter specific target source types, e.g. ecr, github-enterprise, etc.')] = ''):
 
-    targets = snyk.get_all_targets_in_org(snyk_token=snyk_token, org_id=org_id)
+    targets = snyk.get_all_targets_in_org(snyk_token=snyk_token, org_id=org_id, source_types=source_types)
 
     output_csv = ''
 
@@ -61,14 +67,16 @@ def apply_tags(
     snyk_token:
         Annotated[
             str,
-            typer.Argument(
+            typer.Option(
                 help='Snyk API token',
-                envvar='SNYK_TOKEN')],
+                envvar='SNYK_TOKEN',
+                default=...)],
     csv_path:
         Annotated[
             str,
-            typer.Argument(
-                help='Path to input CSV file with format: SCM_ORG_ID, SCM_TARGET_NAME, SCM_TARGET_ID, CONTAINER_ORG_ID, CONTAINER_TARGET_NAME, CONTAINER_TARGET_ID')],
+            typer.Option(
+                help='Path to input CSV file with format: SCM_ORG_ID, SCM_TARGET_NAME, SCM_TARGET_ID, CONTAINER_ORG_ID, CONTAINER_TARGET_NAME, CONTAINER_TARGET_ID',
+                default=...)],
     dry_run:
         Annotated[
             bool,

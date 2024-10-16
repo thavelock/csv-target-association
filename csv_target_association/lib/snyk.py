@@ -26,7 +26,7 @@ RATE_LIMIT_BACKOFF_SEC      = 60
 
 # ===== METHODS =====
 
-def get_all_targets_in_org(snyk_token, org_id):
+def get_all_targets_in_org(snyk_token, org_id, source_types):
     targets = []
 
     headers = {
@@ -36,6 +36,9 @@ def get_all_targets_in_org(snyk_token, org_id):
     base_url = SNYK_REST_API_BASE_URL
 
     url = f'{base_url}/rest/orgs/{org_id}/targets?version={SNYK_REST_API_VERSION}&limit=100&exclude_empty=false'
+
+    if source_types is not '':
+        url = f'{url}&source_types={source_types}'
 
     while True:
         response = requests.request(
